@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LG ThinQ - Google Play 앱</title>
+    <style>
+        /* 기본 스타일 초기화 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        /* [수정] 배경의 검은색을 없애고 흰색/투명 느낌으로 수정 */
+        body {
+            background-color: #ffffff;
+            color: #333333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 1. 처음 화면: 하얀 배경에 덩그러니 놓인 버튼 */
+        .intro-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .main-download-btn {
+            background-color: #e31c1c; 
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(227, 28, 28, 0.3);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .main-download-btn:hover {
+            background-color: #c21818;
+            transform: scale(1.05);
+        }
+
+        /* -------------------------------------- */
+        /* 2. 클릭 시 나타날 구글플레이 화면 (검은색 유지) */
+        /* -------------------------------------- */
+        .app-store-container {
+            width: 375px;
+            background-color: #121212;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            display: none; /* 처음에는 숨김 */
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 20px;
+        }
+        .points-badge {
+            background-color: #1e3a8a;
+            color: #60a5fa;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+        .app-icon {
+            width: 72px;
+            height: 72px;
+            background-color: #e31c1c;
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 24px;
+            color: #ffffff;
+        }
+        .app-icon span {
+            border: 3px solid white;
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+        .app-title-area h1 {
+            font-size: 22px;
+            margin-bottom: 4px;
+            color: #ffffff;
+        }
+        .app-title-area p {
+            color: #8ab4f8;
+            font-size: 14px;
+        }
+
+        .app-info-summary {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+            border-top: 1px solid #2d2d2d;
+            border-bottom: 1px solid #2d2d2d;
+            padding: 12px 0;
+            margin-bottom: 20px;
+        }
+        .info-item {
+            flex: 1;
+        }
+        .info-item:not(:last-child) {
+            border-right: 1px solid #2d2d2d;
+        }
+        .info-value {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 4px;
+            color: #ffffff;
+        }
+        .info-label {
+            font-size: 11px;
+            color: #9aa0a6;
+        }
+        .age-rating {
+            background-color: #31c48d;
+            color: #121212;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+        .install-btn {
+            flex: 1;
+            background-color: #8ab4f8;
+            color: #202124;
+            border: none;
+            padding: 12px;
+            border-radius: 24px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .dropdown-btn {
+            background-color: #1e3a8a;
+            color: #8ab4f8;
+            border: none;
+            width: 44px;
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .screenshots-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+        }
+        .screenshots-container::-webkit-scrollbar {
+            height: 4px;
+        }
+        .screenshots-container::-webkit-scrollbar-thumb {
+            background-color: #3c4043;
+            border-radius: 2px;
+        }
+        .screenshot {
+            min-width: 130px;
+            height: 230px;
+            background-color: #2d2d2d;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 15px;
+            font-size: 11px;
+            color: #9aa0a6;
+            border: 1px solid #3c4043;
+        }
+        .screenshot-content {
+            background-color: #121212;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .app-description {
+            margin-bottom: 20px;
+        }
+        .desc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        .desc-title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .desc-content {
+            font-size: 13px;
+            color: #9aa0a6;
+            line-height: 1.5;
+        }
+
+        .tags-container {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .tag {
+            background-color: #121212;
+            border: 1px solid #3c4043;
+            color: #e8eaed;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="intro-screen" id="introScreen">
+        <button class="main-download-btn" onclick="showAppStore()">DOWNLOAD</button>
+    </div>
+
+    <div class="app-store-container" id="appStoreContainer">
+        
+        <div class="top-nav">
+            <div class="nav-left">←</div>
+            <div class="nav-right">
+                <span class="points-badge">💎 136</span>
+                <span>🔖</span>
+                <span>⋮</span>
+            </div>
+        </div>
+
+        <div class="app-header">
+            <div class="app-icon">
+                <span>Q</span>
+            </div>
+            <div class="app-title-area">
+                <h1>LG ThinQ</h1>
+                <p>LG Electronics, Inc.</p>
+            </div>
+        </div>
+
+        <div class="app-info-summary">
+            <div class="info-item">
+                <div class="info-value">4.8 ★</div>
+                <div class="info-label">리뷰 125만개</div>
+            </div>
+            <div class="info-item">
+                <div class="info-value"><span class="age-rating">3</span></div>
+                <div class="info-label">3세 이상</div>
+            </div>
+            <div class="info-item">
+                <div class="info-value">1억회 이상</div>
+                <div class="info-label">다운로드</div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="install-btn" onclick="alert('다운로드를 시작하지 않고, 화면만 보여주는 예시입니다!')">설치</button>
+            <button class="dropdown-btn">∨</button>
+        </div>
+
+        <div class="screenshots-container">
+            <div class="screenshot">
+                <div class="screenshot-content">LG ThinQ<br>스마트한 일상</div>
+            </div>
+            <div class="screenshot">
+                <div class="screenshot-content">스마트홈이<br>완성되는 공간</div>
+            </div>
+            <div class="screenshot">
+                <div class="screenshot-content">우리집 기기를<br>스마트하게</div>
+            </div>
+        </div>
+
+        <div class="app-description">
+            <div class="desc-header">
+                <span class="desc-title">앱 정보</span>
+                <span>→</span>
+            </div>
+            <div class="desc-content">
+                세심하게 관리하는 우리 집, ThinQ가 합니다.
+            </div>
+        </div>
+
+        <div class="tags-container">
+            <div class="tag">라이프스타일</div>
+            <div class="tag">부동산 및 홈 인테리어</div>
+            <div class="tag">홈 자동화</div>
+            <div class="tag">위젯</div>
+        </div>
+
+    </div>
+
+    <script>
+        function showAppStore() {
+            // 버튼 화면 숨기기
+            document.getElementById('introScreen').style.display = 'none';
+            // 뒷 배경을 다시 어둡게 만들어 앱 화면이 돋보이게 처리
+            document.body.style.backgroundColor = '#000000';
+            // 앱 스토어 화면 보이기
+            document.getElementById('appStoreContainer').style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
